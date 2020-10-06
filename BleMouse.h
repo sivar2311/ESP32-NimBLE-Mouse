@@ -4,8 +4,8 @@
 #if defined(CONFIG_BT_ENABLED)
 
 #include "BleConnectionStatus.h"
-#include "BLEHIDDevice.h"
-#include "BLECharacteristic.h"
+#include "NimBLEHIDDevice.h"
+#include "NimBLECharacteristic.h"
 
 #define MOUSE_LEFT 1
 #define MOUSE_RIGHT 2
@@ -18,13 +18,13 @@ class BleMouse {
 private:
   uint8_t _buttons;
   BleConnectionStatus* connectionStatus;
-  BLEHIDDevice* hid;
-  BLECharacteristic* inputMouse;
+  NimBLEHIDDevice* hid;
+  NimBLECharacteristic* inputMouse;
   void buttons(uint8_t b);
   void rawAction(uint8_t msg[], char msgSize);
   static void taskServer(void* pvParameter);
 public:
-  BleMouse(std::string deviceName = "ESP32 Bluetooth Mouse", std::string deviceManufacturer = "Espressif", uint8_t batteryLevel = 100);
+  BleMouse(std::string deviceName = "ESP32-Mouse", std::string deviceManufacturer = "Espressif", uint8_t batteryLevel = 100);
   void begin(void);
   void end(void);
   void click(uint8_t b = MOUSE_LEFT);
@@ -38,7 +38,7 @@ public:
   std::string deviceManufacturer;
   std::string deviceName;
 protected:
-  virtual void onStarted(BLEServer *pServer) { };
+  virtual void onStarted(NimBLEServer *pServer) { };
 };
 
 #endif // CONFIG_BT_ENABLED

@@ -1,8 +1,7 @@
-#include <BLEDevice.h>
-#include <BLEUtils.h>
-#include <BLEServer.h>
-#include "BLE2902.h"
-#include "BLEHIDDevice.h"
+#include <NimBLEDevice.h>
+#include <NimBLEUtils.h>
+#include <NimBLEServer.h>
+#include "NimBLEHIDDevice.h"
 #include "HIDTypes.h"
 #include "HIDKeyboardTypes.h"
 #include <driver/adc.h>
@@ -16,7 +15,7 @@
   #define LOG_TAG ""
 #else
   #include "esp_log.h"
-  static const char* LOG_TAG = "BLEDevice";
+  static const char* LOG_TAG = "NimBLEDevice";
 #endif
 
 static const uint8_t _hidReportDescriptor[] = {
@@ -141,11 +140,12 @@ void BleMouse::setBatteryLevel(uint8_t level) {
 
 void BleMouse::taskServer(void* pvParameter) {
   BleMouse* bleMouseInstance = (BleMouse *) pvParameter; //static_cast<BleMouse *>(pvParameter);
-  BLEDevice::init(bleMouseInstance->deviceName);
-  BLEServer *pServer = BLEDevice::createServer();
+  NimBLEDevice::init(bleMouseInstance->deviceName);
+
+  NimBLEServer *pServer = NimBLEDevice::createServer();
   pServer->setCallbacks(bleMouseInstance->connectionStatus);
 
-  bleMouseInstance->hid = new BLEHIDDevice(pServer);
+  bleMouseInstance->hid = new NimBLEHIDDevice(pServer);
   bleMouseInstance->inputMouse = bleMouseInstance->hid->inputReport(1); // <-- input REPORTID from report map
   bleMouseInstance->connectionStatus->inputMouse = bleMouseInstance->inputMouse;
 
@@ -154,7 +154,7 @@ void BleMouse::taskServer(void* pvParameter) {
   bleMouseInstance->hid->pnp(0x02, 0xe502, 0xa111, 0x0210);
   bleMouseInstance->hid->hidInfo(0x00,0x02);
 
-  BLESecurity *pSecurity = new BLESecurity();
+  BLESecurity *pSecurity = new NimBLESecurity();
 
   pSecurity->setAuthenticationMode(ESP_LE_AUTH_BOND);
 
@@ -163,7 +163,7 @@ void BleMouse::taskServer(void* pvParameter) {
 
   bleMouseInstance->onStarted(pServer);
 
-  BLEAdvertising *pAdvertising = pServer->getAdvertising();
+  NimBLEAdvertising *pAdvertising = pServer->getAdvertising();
   pAdvertising->setAppearance(HID_MOUSE);
   pAdvertising->addServiceUUID(bleMouseInstance->hid->hidService()->getUUID());
   pAdvertising->start();
