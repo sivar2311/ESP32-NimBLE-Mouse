@@ -4,13 +4,14 @@
   "description": "Bluetooth LE Mouse library for the ESP32.",
   "keywords": "Bluetooth, BLE, HID, Mouse",
   "platforms": "espressif32",
-  "frameworks" : "arduino",
+  "frameworks": "arduino",
   "dependencies": [
     {
       "name": "h2zero/NimBLE-Arduino",
-      "version" : "^1.4.1",
-      "platforms" : "espressif32",
-      "frameworks" : "arduino"
+      "version": "^1.4.1",
+      "platforms": [
+        "espressif32"
+      ]
     }
   ]
 }
