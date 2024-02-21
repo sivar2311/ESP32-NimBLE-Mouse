@@ -37,8 +37,6 @@ public:
   uint8_t batteryLevel;
   std::string deviceManufacturer;
   std::string deviceName;
-protected:
-  virtual void onStarted(NimBLEServer *pServer) { };
 };
 
 #endif // CONFIG_BT_ENABLED
