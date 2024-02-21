@@ -23,6 +23,7 @@ private:
   void onConnect(NimBLEServer* pServer);
   void onDisconnect(NimBLEServer* pServer);
 public:
+  using Callback = std::function<void(void)>;
   BleMouse(std::string deviceName = "ESP32-Mouse", std::string deviceManufacturer = "Espressif", uint8_t batteryLevel = 100);
   void begin(void);
   void end(void);
@@ -33,10 +34,16 @@ public:
   bool isPressed(uint8_t b = MOUSE_LEFT); // check LEFT by default
   bool isConnected(void);
   void setBatteryLevel(uint8_t level);
+  void onConnect(Callback cb);
+  void onDisconnect(Callback cb);
+
   uint8_t batteryLevel;
   std::string deviceManufacturer;
   std::string deviceName;
   bool connected = false;
+
+  Callback connectCallback = nullptr;
+  Callback disconnectCallback = nullptr;
 };
 
 
