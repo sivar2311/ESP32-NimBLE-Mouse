@@ -7,7 +7,7 @@
   "frameworks": "arduino",
   "dependencies": [
     {
-      "name": "h2zero/NimBLE-Arduino",
+      "name": "NimBLE-Arduino",
       "version": "^1.4.1",
       "platforms": [
         "espressif32"
