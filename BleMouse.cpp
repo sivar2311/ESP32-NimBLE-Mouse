@@ -1,7 +1,6 @@
 #include <NimBLEDevice.h>
 #include "sdkconfig.h"
 
-#include "BleConnectionStatus.h"
 #include "BleMouse.h"
 
 #if defined(CONFIG_ARDUHAL_ESP_LOG)
@@ -60,7 +59,6 @@ BleMouse::BleMouse(std::string deviceName, std::string deviceManufacturer, uint8
   this->deviceName = deviceName;
   this->deviceManufacturer = deviceManufacturer;
   this->batteryLevel = batteryLevel;
-  this->connectionStatus = new BleConnectionStatus();
 }
 
 void BleMouse::begin(void)
@@ -68,11 +66,10 @@ void BleMouse::begin(void)
   NimBLEDevice::init(deviceName);
 
   NimBLEServer *pServer = NimBLEDevice::createServer();
-  pServer->setCallbacks(connectionStatus);
+  pServer->setCallbacks(this);
 
   hid = new NimBLEHIDDevice(pServer);
   inputMouse = hid->inputReport(0); // <-- input REPORTID from report map
-  connectionStatus->inputMouse = inputMouse;
 
   hid->manufacturer()->setValue(deviceManufacturer);
 
@@ -146,11 +143,21 @@ bool BleMouse::isPressed(uint8_t b)
 }
 
 bool BleMouse::isConnected(void) {
-  return this->connectionStatus->connected;
+  return connected;
 }
 
 void BleMouse::setBatteryLevel(uint8_t level) {
   this->batteryLevel = level;
   if (hid != 0)
       this->hid->setBatteryLevel(this->batteryLevel);
+}
+
+void BleMouse::onConnect(NimBLEServer* pServer)
+{
+  connected = true;
+}
+
+void BleMouse::onDisconnect(NimBLEServer* pServer)
+{
+  connected = false;
 }
