@@ -136,10 +136,12 @@ bool BleMouse::isConnected(void) const {
     return connected;
 }
 
-void BleMouse::setBatteryLevel(uint8_t level) {
+void BleMouse::setBatteryLevel(uint8_t level, bool notify); {
     this->batteryLevel = level;
     if (hid != 0)
         this->hid->setBatteryLevel(this->batteryLevel);
+        if (notify)
+            this->hid->batteryLevel()->notify();
 }
 
 void BleMouse::onConnect(NimBLEServer *pServer) {
