@@ -27,7 +27,7 @@ class BleMouse : protected NimBLEServerCallbacks {
     void release(uint8_t b = MOUSE_LEFT);          // release LEFT by default
     bool isPressed(uint8_t b = MOUSE_LEFT) const;  // check LEFT by default
     bool isConnected(void) const;
-    void setBatteryLevel(uint8_t level, bool notify);
+    void setBatteryLevel(uint8_t level, bool notify = false);
     void onConnect(Callback cb);
     void onDisconnect(Callback cb);
 
